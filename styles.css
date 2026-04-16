@@ -36,7 +36,7 @@ body {
 .content {
     position: relative; 
     z-index: 1; 
-    width: 90%; 
+    width: 95%; 
     margin: 0 auto;
     /* Centering Logic */
     display: flex;
@@ -45,11 +45,8 @@ body {
     justify-content: flex-start;
     padding-top: 55vh;
     min-height: 100vh;
-    padding-bottom: 50vh;
-}
-
-@media only screen and (min-width: 36.250em) {
-  .content { width: 60%; }
+    padding-bottom: 20vh;
+    text-align: center;
 }
 
 .opaque {
@@ -62,40 +59,50 @@ body {
 .content h1 {
     background-color: #d4e6a5;
     color: #1a1a1a;
-    padding: 10px 25px;
+    padding: 10px 20px;
     border-radius: 12px;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    width: fit-content
 }
 
 #searchForm {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;;
+    gap: 15px;
+    width: 100%;    
+    max-width: 400px;
     margin-bottom: 15px;
 }
 
 #searchInput{
     padding: 12px;
-    width: 250px;
+    width: 100px;
+    max-width: 300px;
     border: 1px solid #ccc;
     border-radius: 10px;
     border-color: #c8e09d;
 }
 #searchButton {
-    padding: 10px 20px;
+    width: 100%;
+    max-width: 150px;
+    padding: 12px 20px;
     border-radius: 8px;
     border: none;
     background: #eee;
     cursor: pointer;
     font-weight: bold;
 }
-#searchButton:hover {
-    background-color: #0056b3;
-}       
-
+      
 #result{
+    display: none; /*hides the div by default*/
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
     margin-top: 40px;
-    padding: 20px;
+    padding: 15px;
     border: #2A2320;
     border-radius: 10px;
     background-color:#2A2320;
@@ -127,4 +134,29 @@ body {
 }
 audio{
     background-color: #d4d130;
+}
+
+/* 3. Media Query for Desktop (36.25em is ~580px) */
+@media only screen and (min-width: 36.250em) {
+    .content { 
+        width: 60%; 
+        padding-top: 65vh; /* Push it down more for larger screens */
+    }
+
+    .content h1 {
+        font-size: 2.5rem; /* Larger title on desktop */
+    }
+
+    #searchForm {
+        flex-direction: row; /* Horizontal on desktop */
+        justify-content: center;
+    }
+
+    #searchInput {
+        width: 250px; /* Fixed width looks better on wide screens */
+    }
+
+    #searchButton {
+        width: auto;
+    }
 }

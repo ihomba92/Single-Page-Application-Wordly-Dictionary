@@ -21,16 +21,21 @@ async function fetchWordData(word) {
 }
 
 function displayWordData(wordData) {
+    const resultContainer = document.getElementById('result'); // Ensure this is defined
+    
     if (!wordData) {
+        resultContainer.style.display = 'block'; // Show the box to display the error
         resultContainer.innerHTML = '<p>Word not found. Please try another word.</p>';
         return;
     }
+    //shows the container only when it has content
+    resultContainer.style.display = 'flex';
+
     // this finds the first phonetic or audio that has text and audio
     const { word, phonetics, meanings } = wordData;
     const phoneticText = phonetics.find((p) => p.text && p.audio) || phonetics[0] ||{};
     const audioUrl = phonetics.find(p => p.audio)?.audio;
     const meaning = meanings[0]?.definitions[0]?.definition || 'N/A';  
-
     const synonymsList = meanings[0]?.synonyms?.length > 0 ? meanings[0].synonyms : meanings[0]?.definitions[0]?.synonyms ||[];
     const synonyms = synonymsList.length > 0 ? synonymsList.join(', ') : 'N/A';
     const partOfSpeech = meanings[0]?.partOfSpeech || 'N/A';
@@ -41,7 +46,7 @@ function displayWordData(wordData) {
         <h2>${word}</h2>
         <button id="addFavorite" class="fav-btn">⭐ Favorite</button> </div>
         <p><strong>Meaning:</strong> ${meaning}</p>
-        <p><strong>Phonetic:</strong> ${phonetics.text || 'N/A'}</p>
+        <p><strong>Phonetic:</strong> ${phoneticText.text || 'N/A'}</p>
         <p><strong>Part of Speech:</strong> ${partOfSpeech}</p>
         <p><strong>Synonyms:</strong> ${synonyms}</p>
         <p><strong>Example:</strong> ${example}</p>
@@ -64,7 +69,7 @@ function displayWordData(wordData) {
 searchButton.addEventListener('click', async (event) => {
     event.preventDefault();
     const word = searchInput.value.trim();
-
+    resultContainer.style.display = 'none'; // Hide the box initially
     resultContainer.innerHTML = ''; // clear previous results
 
     if (word) {
