@@ -25,7 +25,7 @@ function displayWordData(wordData) {
         resultContainer.innerHTML = '<p>Word not found. Please try another word.</p>';
         return;
     }
-    // tjis finds the first phonetic or audio that has text and audio
+    // this finds the first phonetic or audio that has text and audio
     const { word, phonetics, meanings } = wordData;
     const phoneticText = phonetics.find((p) => p.text && p.audio) || phonetics[0] ||{};
     const audioUrl = phonetics.find(p => p.audio)?.audio;
@@ -80,50 +80,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = document.querySelector('.content');
 
     // 1. Zoom, Blur, and Opacity Logic on Scroll
-    window.addEventListener('scroll', () => {
+    const handleScroll = () => {
         const fromTop = window.scrollY;
 
-        // Zoom logic
+        // Zoom logic: Starts at 150%, ends at 100%
         let zoomValue = 150 - (fromTop / 10);
         if (zoomValue < 100) zoomValue = 100;
 
         // Blur and Opacity logic
-        const blurValue = fromTop / 60;
+        const blurValue = fromTop / 20;
         const opacityValue = 1 - (fromTop / 1000);
 
         if (feature) {
-            feature.style.backgroundSize = `${zoomValue}%`;
-            feature.style.filter = `blur(${blurValue}px)`;
-            feature.style.opacity = opacityValue;
+            // Using requestAnimationFrame for better performance
+            window.requestAnimationFrame(() => {
+                feature.style.backgroundSize = `${zoomValue}%`;
+                feature.style.filter = `blur(${blurValue}px)`;
+                feature.style.opacity = opacityValue;
+            });
         }
-    });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once on load to set initial state
 
     // 2. Automatic Smooth Scroll on Button Click
     if (searchButton && content) {
         searchButton.addEventListener('click', (e) => {
-            // Note: Your word fetching logic already handles e.preventDefault()
-            
-            const targetOffset = content.offsetTop - 40;
-
+            // Your API fetch logic should handle e.preventDefault()
+            const targetOffset = content.offsetTop + (window.innerHeight * 0.7); // Scroll to 70% of the content section
             window.scrollTo({
                 top: targetOffset,
                 behavior: 'smooth'
             });
-        });
-    }
-
-    // 3. Browser-specific Overlay Logic
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-
-    if ((isChrome || isSafari) && feature) {
-        const opaqueDiv = document.createElement('div');
-        opaqueDiv.classList.add('opaque');
-        feature.appendChild(opaqueDiv);
-
-        window.addEventListener('scroll', () => {
-            const opacity = window.scrollY / 5000;
-            opaqueDiv.style.opacity = opacity;
         });
     }
 });
