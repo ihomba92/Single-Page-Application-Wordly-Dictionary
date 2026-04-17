@@ -55,8 +55,6 @@ function displayWordData(wordData) {
     document.getElementById('addFavorite').addEventListener('click', () => {
         selectFavouriteWord(word);
     });
-
-
     if (audioUrl) {
         const audioElement = document.createElement('audio');
         audioElement.controls = true;
